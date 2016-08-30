@@ -6,7 +6,6 @@ Used to boostrap Wagtail-based project within our company.
 Powered by Cookiecutter_ and Cookiecutter-Django_.
 
 * Documentation: https://cookiecutter-django.readthedocs.io/en/latest/
-* See Troubleshooting_ for common errors and obstacles
 
 .. _cookiecutter: https://github.com/audreyr/cookiecutter
 
