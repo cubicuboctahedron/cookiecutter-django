@@ -11,6 +11,8 @@ from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail_modeltranslation.models import TranslationMixin
 from wagtail.wagtailsearch import index
 from modelcluster.fields import ParentalKey
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from taggit.models import TaggedItemBase
 
 from ..basic.models import BasicStreamBlock, Image
 
@@ -40,7 +42,12 @@ class Entry(TranslationMixin, Page):
         ImageChooserPanel('cover_image'),
         StreamFieldPanel('body'),
         InlinePanel('gallery', label='Images'),
+        FieldPanel('tags'),
     ]
+
+
+class BlogPostTag(TaggedItemBase):
+    content_object = ParentalKey('blog.BlogPost', related_name='tagged_items')
 
 
 class BlogPostImageGalleryItem(Orderable, Image):
@@ -48,9 +55,14 @@ class BlogPostImageGalleryItem(Orderable, Image):
 
 
 class BlogPost(Entry):
+    tags = ClusterTaggableManager(through=BlogPostTag, blank=True)
 
     class Meta:
         verbose_name = 'Blog Post'
+
+
+class EventPageTag(TaggedItemBase):
+    content_object = ParentalKey('blog.EventPage', related_name='tagged_items')
 
 
 class EventImageGalleryItem(Orderable, Image):
@@ -72,6 +84,7 @@ class EventPage(Entry):
     time_from = models.TimeField("Start time", null=True, blank=True)
     time_to = models.TimeField("End time", null=True, blank=True)
     location = RichTextField(blank=True)
+    tags = ClusterTaggableManager(through=EventPageTag, blank=True)
 
     search_fields = Entry.search_fields + (
         index.SearchField('location'),
@@ -88,6 +101,7 @@ class EventPage(Entry):
         ImageChooserPanel('cover_image'),
         StreamFieldPanel('body'),
         InlinePanel('gallery', label='Images'),
+        FieldPanel('tags'),
     ]
 
 
