@@ -1,0 +1,7 @@
+{%raw %}{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags static %}
+
+{% block content %}
+    <h1 class="page-title">{% block page_title %}{{ self.title }}{% endblock %}</h1>
+    {% include "basic/includes/streamfield.html" with content=self.body %}
+{% endblock %}{% endraw %}

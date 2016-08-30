@@ -12,17 +12,32 @@ module.exports = function (grunt) {
 
   var pathsConfig = function (appName) {
     this.app = appName || appConfig.name;
+    this.components = this.app + '/static/components';
 
     return {
       app: this.app,
       templates: this.app + '/templates',
       css: this.app + '/static/css',
-      sass: this.app + '/static/sass',
+      less: this.app + '/static/less',
       fonts: this.app + '/static/fonts',
-      images: this.app + '/static/images',
+      images: this.app + '/static/img',
+      videos: this.app + '/static/video',
       js: this.app + '/static/js',
       manageScript: 'manage.py',
-    }
+      html: this.app + '/static/html',
+      thirdPartyCss: [
+          this.components + '/sc-date-time/dist/sc-date-time.css',
+      ],
+      thirdPartyJs: [
+          this.components + '/bootstrap/dist/js/bootstrap.js',
+      ],
+      thirdPartyFonts: [
+          this.components + '/font-awesome/fonts/*',
+          this.components + '/bootstrap/fonts/*'
+      ],
+      partials: this.app + '/static/partials',
+      dist: this.app + '/static/dist'
+    };
   };
 
   grunt.initConfig({
@@ -30,105 +45,161 @@ module.exports = function (grunt) {
     paths: pathsConfig(),
     pkg: appConfig,
 
-    // see: https://github.com/gruntjs/grunt-contrib-watch
     watch: {
       gruntfile: {
         files: ['Gruntfile.js']
       },
-      sass: {
-        files: ['<%= paths.sass %>/**/*.{scss,sass}'],
-        tasks: ['sass:dev'],
+      less: {
+        files: ['<%= paths.less %>/**/*.less'],
+        tasks: ['less:dev'],
         options: {
-          atBegin: true
+          atBegin: true,
+          livereload: true,
+          interval: 1000,
         }
       },
-      livereload: {
-        files: [
-          '<%= paths.js %>/**/*.js',
-          '<%= paths.sass %>/**/*.{scss,sass}',
-          '<%= paths.app %>/**/*.html'
-          ],
+      fonts: {
+        files: '<%= paths.thirdPartyFonts %>',
+        tasks: ['newer:copy:fonts'],
         options: {
-          spawn: false,
+          atBegin: true,
           livereload: true,
-        },
+          interval: 1000,
+        }
       },
+      images: {
+        files: '<%= paths.images %>',
+        tasks: ['newer:copy:images'],
+        options: {
+          atBegin: true,
+          livereload: true,
+          interval: 1000,
+        }
+      },
+      videos: {
+        files: '<%= paths.videos %>',
+        tasks: ['newer:copy:videos'],
+        options: {
+          atBegin: true,
+          livereload: true,
+          interval: 1000,
+        }
+      },
+      js: {
+        files: ['<%= paths.js %>/**/*.js'],
+        tasks: ['concat:app'],
+        options: {
+          atBegin: true,
+          livereload: true,
+          interval: 1000,
+        }
+      },
+      thirdPartyJs: {
+        files: ['<%= paths.thirdPartyJs %>'],
+        tasks: ['concat:components'],
+        options: {
+          atBegin: true,
+          livereload: true,
+          interval: 1000,
+        }
+      },
+      thirdPartyCss: {
+        files: ['<%= paths.thirdPartyCss %>'],
+        tasks: ['concat:css'],
+        options: {
+          atBegin: true,
+          livereload: true,
+          interval: 1000,
+        }
+      }
     },
 
-    // see: https://github.com/sindresorhus/grunt-sass
-    sass: {
+    less: {
       dev: {
           options: {
-              outputStyle: 'nested',
               sourceMap: false,
-              precision: 10
+              compress: false,
+              optimization: 2,
           },
           files: {
-              '<%= paths.css %>/project.css': '<%= paths.sass %>/project.scss'
+              '<%= paths.dist %>/css/project.css': '<%= paths.less %>/project.less'
           },
       },
       dist: {
           options: {
-              outputStyle: 'compressed',
-              sourceMap: false,
-              precision: 10
+              sourceMap: true,
+              sourceMapURL: 'project.css.map',
+              compress: true,
+              optimization: 10,
           },
           files: {
-              '<%= paths.css %>/project.css': '<%= paths.sass %>/project.scss'
+              '<%= paths.dist %>/css/project.css': '<%= paths.less %>/project.less'
           },
       }
     },
 
-    //see https://github.com/nDmitry/grunt-postcss
-    postcss: {
-      options: {
-        map: true, // inline sourcemaps
-
-        processors: [
-          require('pixrem')(), // add fallbacks for rem units
-          require('autoprefixer-core')({browsers: [
-            'Android 2.3',
-            'Android >= 4',
-            'Chrome >= 20',
-            'Firefox >= 24',
-            'Explorer >= 8',
-            'iOS >= 6',
-            'Opera >= 12',
-            'Safari >= 6'
-          ]}), // add vendor prefixes
-          require('cssnano')() // minify the result
-        ]
-      },
-      dist: {
-        src: '<%= paths.css %>/*.css'
-      }
+    concat: {
+        options: {
+            separator: ';\n',
+            sourceMap: true,
+        },
+        css: {
+            options: {
+                sourceMap: false,
+            },
+            src: '<%= paths.thirdPartyCss %>',
+            dest: '<%= paths.dist %>/css/components.css',
+        },
+        components: {
+            src: '<%= paths.thirdPartyJs %>',
+            dest: '<%= paths.dist %>/js/components.js',
+        },
     },
 
-    // see: https://npmjs.org/package/grunt-bg-shell
-    bgShell: {
-      _defaults: {
-        bg: true
-      },
-      runDjango: {
-        cmd: 'python <%= paths.manageScript %> runserver'
-      },
-      {% if cookiecutter.use_mailhog == "y" and cookiecutter.use_docker == 'n' -%}runMailHog: {
-        cmd: './mailhog'
-      },{%- endif %}
+    copy: {
+        fonts: {
+            files: [{
+                expand: true, 
+                src: '<%= paths.thirdPartyFonts %>',
+                dest: '<%= paths.dist %>/fonts',
+                flatten: true, 
+                filter: 'isFile'
+            }]
+        },
+        images: {
+            files: [{
+                expand: true, 
+                cwd: '<%= paths.images %>',
+                src: '**',
+                dest: '<%= paths.dist %>/img',
+            }]
+        },
+        videos: {
+            files: [{
+                expand: true, 
+                cwd: '<%= paths.videos %>',
+                src: '**',
+                dest: '<%= paths.dist %>/video',
+            }]
+        },
+    },
+    uglify: {
+        dist: {
+            options: {
+                sourceMap: true,
+            },
+            files: {
+                '<%= paths.dist %>/js/components.min.js': ['<%= paths.dist %>/js/components.js'],
+            }
+        }
     }
   });
 
-  grunt.registerTask('serve', [
-    {% if cookiecutter.use_mailhog == "y" and cookiecutter.use_docker == 'n' -%}
-    'bgShell:runMailHog',
-    {%- endif %}
-    'bgShell:runDjango',
-    'watch'
-  ]);
-
   grunt.registerTask('build', [
-    'sass:dist',
-    'postcss'
+    'less:dist',
+    'copy',
+    'concat',
+    'uglify',
   ]);
 
   grunt.registerTask('default', [

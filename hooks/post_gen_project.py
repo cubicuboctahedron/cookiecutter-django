@@ -74,13 +74,21 @@ def make_secret_key(project_directory):
     # local.py settings file
     set_secret_key(local_setting)
 
-    env_file = os.path.join(
+    env_production = os.path.join(
         project_directory,
-        'env.example'
+        'compose/django/.env.production'
     )
 
-    # env.example file
-    set_secret_key(env_file)
+    env_dev = os.path.join(
+        project_directory,
+        'compose/django/.env.dev'
+    )
+
+    # .env.production file
+    set_secret_key(env_production)
+
+    # .env.dev file
+    set_secret_key(env_dev)
 
 
 def remove_file(file_name):

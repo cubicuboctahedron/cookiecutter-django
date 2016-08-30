@@ -74,3 +74,11 @@ tests/.hitch
 # MailHog binary
 mailhog
 {% endif %}
+
+
+{{ cookiecutter.project_slug }}/static/components/
+{{ cookiecutter.project_slug }}/static/dist/
+staticfiles
+.vagrant
+.htaccess
+node_modules

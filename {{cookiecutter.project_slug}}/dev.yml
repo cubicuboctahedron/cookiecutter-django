@@ -10,8 +10,9 @@ services:
     volumes:
       - postgres_data_dev:/var/lib/postgresql/data
       - postgres_backup_dev:/backups
-    environment:
-      - POSTGRES_USER={{cookiecutter.project_slug}}
+    env_file: ./compose/postgres/.env.postgres
+    restart: always
+    network_mode: "bridge"
 
   django:
     build:
@@ -20,37 +21,14 @@ services:
     command: /start-dev.sh
     depends_on:
       - postgres
-    environment:
-      - POSTGRES_USER={{cookiecutter.project_slug}}
-      - USE_DOCKER=yes
+    env_file:
+      - ./compose/postgres/.env.postgres
+      - ./compose/django/.env.dev
     volumes:
       - .:/app
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     links:
       - postgres
-{% if cookiecutter.use_mailhog == 'y' %}
-      - mailhog
-{% endif %}
-
-{% if cookiecutter.use_pycharm == 'y' %}
-  pycharm:
-    build:
-      context: .
-      dockerfile: ./compose/django/Dockerfile-dev
-    depends_on:
-      - postgres
-    environment:
-      - POSTGRES_USER={{cookiecutter.project_slug}}
-    volumes:
-      - .:/app
-    links:
-      - postgres
-{% endif %}
-
-{% if cookiecutter.use_mailhog == 'y' %}
-  mailhog:
-    image: mailhog/mailhog
-    ports:
-      - "8025:8025"
-{% endif %}
+    restart: always
+    network_mode: "bridge"

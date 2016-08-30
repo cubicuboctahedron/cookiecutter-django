@@ -12,8 +12,29 @@ RUN pip install -r /requirements/production.txt \
     && groupadd -r django \
     && useradd -r -g django django
 
+# adding node+npm
+RUN curl -sL https://deb.nodesource.com/setup_4.x | bash -
+RUN apt-get install -y nodejs
+RUN npm install -g grunt-cli bower
+
+RUN groupadd -r django && useradd -r -g django django
+
+RUN mkdir -p /node
+ADD package.json /node/package.json
+RUN cd /node && npm install
+
+RUN mkdir -p /bower
+ADD bower.json /bower/bower.json
+RUN cd /bower && bower --allow-root install
+
 COPY . /app
+RUN cp -a /node/node_modules /app/
+RUN cp -a /bower/bower_components /app/jet360/static/components
 RUN chown -R django /app
+
+WORKDIR /app
+
+RUN cd /app && grunt build
 
 COPY ./compose/django/gunicorn.sh /gunicorn.sh
 COPY ./compose/django/entrypoint.sh /entrypoint.sh
@@ -23,7 +44,5 @@ RUN sed -i 's/\r//' /entrypoint.sh \
     && chown django /entrypoint.sh \
     && chmod +x /gunicorn.sh \
     && chown django /gunicorn.sh
-
-WORKDIR /app
 
 ENTRYPOINT ["/entrypoint.sh"]

@@ -15,9 +15,16 @@ def update_site_forward(apps, schema_editor):
     """Set site domain and name."""
     Site = apps.get_model('sites', 'Site')
     Site.objects.update_or_create(
-        id=settings.SITE_ID,
+        id=1,
         defaults={
             'domain': '{{cookiecutter.domain_name}}',
+            'name': '{{cookiecutter.project_name}}'
+        }
+    )
+    Site.objects.update_or_create(
+        id=2,
+        defaults={
+            'domain': '{{cookiecutter.project_name}}.dev',
             'name': '{{cookiecutter.project_name}}'
         }
     )
@@ -27,12 +34,13 @@ def update_site_backward(apps, schema_editor):
     """Revert site domain and name to default."""
     Site = apps.get_model('sites', 'Site')
     Site.objects.update_or_create(
-        id=settings.SITE_ID,
+        id=1,
         defaults={
             'domain': 'example.com',
             'name': 'example.com'
         }
     )
+    Site.objects.filter(id=2).delete()
 
 
 class Migration(migrations.Migration):

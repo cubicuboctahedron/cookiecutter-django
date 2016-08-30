@@ -16,3 +16,7 @@ factory_boy==2.7.0
 # pytest
 pytest-django==2.9.1
 pytest-sugar==0.7.1
+
+selenium==2.47
+django-jenkins==0.17
+model-mommy==1.2.5

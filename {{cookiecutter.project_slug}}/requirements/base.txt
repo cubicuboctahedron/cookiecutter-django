@@ -65,3 +65,4 @@ django-webpack-loader==0.3.3
 {%- endif %}
 
 # Your custom requirements go here
+wagtail==1.6.1
