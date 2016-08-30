@@ -88,8 +88,8 @@ class Image(models.Model):
         abstract = True
 
 
-class PageImage(Orderable, Image):
-    page = ParentalKey('wagtailcore.Page', related_name='image_list')
+class ImageGalleryItem(Orderable, Image):
+    page = ParentalKey('basic.BasicPage', related_name='gallery')
 
 
 class BasicPage(Page):
@@ -97,5 +97,5 @@ class BasicPage(Page):
 
 BasicPage.content_panels = Page.content_panels + [
     StreamFieldPanel('body'),
-    InlinePanel('image_list', label="Images"),
+    InlinePanel('gallery', label="Images"),
 ]
