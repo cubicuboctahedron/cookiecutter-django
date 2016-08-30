@@ -1,0 +1,13 @@
+{% raw %}{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+<h1>{{self.title}}</h1>
+    <ul class="list-unstyled the-loop">
+    {% for entry in entries %}
+        <li class="{% if forloop.first %} first-reset{% endif %}">
+            <h2><a href="{% pageurl entry %}">{{ entry.title }}</a></h2>
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}{% endraw %}
