@@ -10,6 +10,7 @@ from wagtail.wagtailadmin.edit_handlers import StreamFieldPanel, FieldPanel, \
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
+from wagtail_modeltranslation.models import TranslationMixin
 from wagtail.wagtailcore.blocks import TextBlock, StructBlock, StreamBlock, \
     FieldBlock, CharBlock, RichTextBlock, RawHTMLBlock
 from modelcluster.fields import ParentalKey
@@ -92,7 +93,7 @@ class ImageGalleryItem(Orderable, Image):
     page = ParentalKey('basic.BasicPage', related_name='gallery')
 
 
-class BasicPage(Page):
+class BasicPage(TranslationMixin, Page):
     body = fields.StreamField(BasicStreamBlock())
 
 BasicPage.content_panels = Page.content_panels + [

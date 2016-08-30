@@ -8,13 +8,14 @@ from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailadmin.edit_handlers import StreamFieldPanel, FieldPanel, \
     InlinePanel, PageChooserPanel
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
+from wagtail_modeltranslation.models import TranslationMixin
 from wagtail.wagtailsearch import index
 from modelcluster.fields import ParentalKey
 
 from ..basic.models import BasicStreamBlock, Image
 
 
-class Entry(Page):
+class Entry(TranslationMixin, Page):
 
     class Meta:
         abstract = True
@@ -27,7 +28,7 @@ class Entry(Page):
         related_name='+'
     )
     body = StreamField(BasicStreamBlock())
-    date = models.DateTimeField("Post date")
+    date = models.DateField("Post date")
 
     search_fields = Page.search_fields + (
         index.SearchField('body'),
@@ -90,7 +91,7 @@ class EventPage(Entry):
     ]
 
 
-class BlogIndexPage(Page):
+class BlogIndexPage(TranslationMixin, Page):
     intro = RichTextField(blank=True)
 
     search_fields = Page.search_fields + (
