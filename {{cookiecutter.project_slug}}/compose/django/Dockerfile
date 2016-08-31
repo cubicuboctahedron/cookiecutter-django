@@ -29,7 +29,7 @@ RUN cd /bower && bower --allow-root install
 
 COPY . /app
 RUN cp -a /node/node_modules /app/
-RUN cp -a /bower/bower_components /app/jet360/static/components
+RUN cp -a /bower/bower_components /app/{{ cookiecutter.project_slug }}/static/components
 RUN chown -R django /app
 
 WORKDIR /app
