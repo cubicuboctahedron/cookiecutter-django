@@ -35,6 +35,7 @@ DJANGO_APPS = (
     'django.contrib.admin',
 )
 WAGTAIL_APPS = (
+    'wagtail_modeltranslation',
     'wagtail.wagtailforms',
     'wagtail.wagtailredirects',
     'wagtail.wagtailembeds',
