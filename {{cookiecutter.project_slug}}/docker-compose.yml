@@ -1,15 +1,11 @@
 version: '2'
 
-volumes:
-  postgres_data: {}
-  postgres_backup: {}
-
 services:
   postgres:
     build: ./compose/postgres
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - postgres_backup:/backups
+      - /projects/{{cookiecutter.project_slug}}/postgres:/var/lib/postgresql/data
+      - /backups/{{cookiecutter.project_slug}}/postgres:/backups
     env_file: ./compose/postgres/.env.postgres
     restart: always
     network_mode: "bridge"
@@ -23,11 +19,18 @@ services:
       - postgres
       - redis
     command: /gunicorn.sh
-    env_file: ./compose/django/.env.production
+    env_file:
+      - ./compose/postgres/.env.postgres
+      - ./compose/django/.env.production
+      - ./compose/django/.env.s3
     expose:
       - "5000"
     restart: always
     network_mode: "bridge"
+    volumes:
+      - /projects/{{cookiecutter.project_slug}}/media:/app/{{cookiecutter.project_slug}}/media
+    links:
+      - postgres
 
   redis:
     image: redis:latest

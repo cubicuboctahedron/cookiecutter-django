@@ -24,6 +24,7 @@ services:
     env_file:
       - ./compose/postgres/.env.postgres
       - ./compose/django/.env.dev
+      - ./compose/django/.env.s3
     volumes:
       - .:/app
     expose:

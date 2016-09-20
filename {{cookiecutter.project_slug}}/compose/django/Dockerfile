@@ -17,8 +17,6 @@ RUN curl -sL https://deb.nodesource.com/setup_4.x | bash -
 RUN apt-get install -y nodejs
 RUN npm install -g grunt-cli bower
 
-RUN groupadd -r django && useradd -r -g django django
-
 RUN mkdir -p /node
 ADD package.json /node/package.json
 RUN cd /node && npm install
