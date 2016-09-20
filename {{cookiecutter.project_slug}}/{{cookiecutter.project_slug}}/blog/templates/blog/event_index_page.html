@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags  i18n%}
+
+{% block content %}
+<div class="container white inner event-index">
+    <h1 class="title text-center">{{self.title}}</h1>
+
+    <div class="row">
+    {% cycle '' '</div><div class="row items">' as row silent %}
+    {% for event in events.all %}
+        <div class="col-sm-6">
+            <div class="event">
+                <div class="left">
+                    <a href="{% pageurl event %}"><h4>{{ event.title }}</h4></a>
+                    <a href="{% pageurl event %}"><div class="desc">{{ event.intro|richtext }}</div></a>
+                    <p class="date"><strong>{{ event.date_from|date }}</strong>{% if event.time_from %} from <strong>{{ event.time_from }}</strong>{% endif %}</p>
+                    <a href="{% pageurl event %}" class="btn btn-block btn-primary">Book Now!</a>
+                </div>
+                <div class="right">
+                    {% image event.cover_image fill-240x240 as cover %}
+                    <a href="{% pageurl event %}"><img src="{{ cover.url }}" title="{{ cover.alt }}" alt="{{ cover.alt }}" class="img-responsive"/></a>
+                </div>
+            </div>
+        </div>
+    {{ row }}
+    {% cycle row %}
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}

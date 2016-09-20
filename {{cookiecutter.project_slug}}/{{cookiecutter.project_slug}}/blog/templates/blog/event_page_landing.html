@@ -21,18 +21,10 @@
     </div>
     {% endif %}
     <div class="container white inner">
+        <div class="alert alert-success">{{ self.submit_text|richtext }}</div>
+
         {% include "basic/includes/streamfield.html" with content=self.body %}
 
-        {% include "blog/elements/carousel.html" with carousel_items=self.carousel_items.all only %}
-
         {% include "basic/elements/carousel.html" with carousel_items=self.carousel_items.all only %}
-
-        {% if form.as_p %}
-        <form action="{% pageurl page %}" method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit">
-        </form>
-        {% endif %}
     </div>
 {% endblock %}
