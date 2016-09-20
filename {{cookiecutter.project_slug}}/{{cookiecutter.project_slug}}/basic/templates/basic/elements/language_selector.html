@@ -1,7 +1,9 @@
-{% load nav_tags wagtailcore_tags %}
+{% raw %}{% load nav_tags wagtailcore_tags %}
 {% get_site_root as site_root %}
 
 <ul class="nav navbar-nav navbar-right lang">
-    <li class="{% if request.LANGUAGE_CODE == 'cs' %} active"><span>CZ</span>{% else %}"><a href="{% switch_language 'cs' %}">CZ</a></li>{% endif %}
     <li class="{% if request.LANGUAGE_CODE == 'en' %} active"><span>EN</span>{% else %}"><a href="{% switch_language 'en' %}">EN</a></li>{% endif %}
-</ul>
+    {% comment %}
+    <li class="{% if request.LANGUAGE_CODE == 'cs' %} active"><span>CZ</span>{% else %}"><a href="{% switch_language 'cs' %}">CZ</a></li>{% endif %}
+    {% endcomment %}
+</ul>{% endraw %}
