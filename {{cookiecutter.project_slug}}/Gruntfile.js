@@ -26,9 +26,9 @@ module.exports = function (grunt) {
       manageScript: 'manage.py',
       html: this.app + '/static/html',
       thirdPartyCss: [
-          this.components + '/sc-date-time/dist/sc-date-time.css',
       ],
       thirdPartyJs: [
+          this.components + '/jquery/dist/jquery.js',
           this.components + '/bootstrap/dist/js/bootstrap.js',
       ],
       thirdPartyFonts: [
@@ -153,6 +153,10 @@ module.exports = function (grunt) {
         components: {
             src: '<%= paths.thirdPartyJs %>',
             dest: '<%= paths.dist %>/js/components.js',
+        },
+        app: {
+            src: '<%= paths.js %>',
+            dest: '<%= paths.dist %>/js/project.js',
         },
     },
 

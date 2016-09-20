@@ -22,8 +22,7 @@
     "grunt-contrib-less": "^1.0.1",
     "grunt-contrib-uglify": "^1.0.0",
     "grunt-processhtml": "^0.3.8",
-    "grunt-newer": "^1.1.2",
-    {% elif cookiecutter.js_task_runner == 'Gulp' %}
+    "grunt-newer": "^1.1.2"{% elif cookiecutter.js_task_runner == 'Gulp' %},
     "browser-sync": "^2.14.0",
     "del": "^2.2.2",
     "gulp": "^3.9.1",
