@@ -1,0 +1,30 @@
+{% raw %}{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags static %}
+
+{% block content %}
+    {% if page.cover_image %}
+    <div class="container cover">
+        <div class="card">
+            <div class="caption">
+                <h1 class="title">{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }}{% endif %}{% endblock %}</h1>
+                {% if self.search_description %}
+                <hr>
+                <p class="lead">{{ self.search_description }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {% image page.cover_image width-1180 as cover %}
+        <div class="overflow fill">
+            <img src="{{ cover.url }}" title="{{ cover.alt }}" alt="{{ cover.alt }}" class="img-responsive"/>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if page.body %}
+        <div class="container white inner">
+            {% include "basic/includes/streamfield.html" with content=self.body %}
+        </div>
+    {% endif %}
+
+{% endblock %}{% endraw %}
