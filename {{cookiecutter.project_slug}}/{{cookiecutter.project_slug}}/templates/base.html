@@ -1,4 +1,4 @@
-{% raw %}{% load static wagtailuserbar wagtailcore_tags extra_tags i18n %}
+{% raw %}{% load static wagtailuserbar wagtailcore_tags nav_tags i18n %}
 {% get_site_root as site_root %}
 
 <!DOCTYPE html>
@@ -6,34 +6,77 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }}{% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
-        <meta name="description" content="" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }}{% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
+    {% if self.search_description %}
+    <meta name="description" content="{{ self.search_description }}" />
+    {% endif %}
 
-        {# Global stylesheets #}
-        <link rel='stylesheet' type="text/css" href="{% static 'dist/css/components.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'dist/css/project.css' %}">
-        {% block extra_css %}
-            {# Override this in templates to add extra stylesheets #}
-        {% endblock %}
-    </head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <body class="{% block body_class %}{% endblock %}">
-        {% wagtailuserbar %}
-        {% block header %}{% endblock %}
+    {% comment %}
+<!-- uncomment if there is a custom CSS not included in the /static/less/project.less file
+<link rel='stylesheet' type="text/css" href="{% static 'dist/css/components.css' %}">
+-->
+{% endcomment %}
 
-        {% block content %}
-        {% endblock %}
+<link rel="stylesheet" type="text/css" href="{% static 'dist/css/project.css' %}">
 
-        {# Global javascript #}
-        <script src="{% static 'components/jquery/dist/jquery.min.js' %}"></script>
-        <script src="{% static 'dist/js/components.js' %}"></script>
-        <script src="{% static 'dist/js/project.js' %}" type="text/javascript"></script>
-        {% block extra_js %}
-            {# Override this in templates to add extra javascript #}
-        {% endblock %}
-    </body>
+{% block head %}
+{% endblock %}
+
+</head>
+
+<body class="{{ self.slug }} {% block body_class %}{% endblock %}">
+    {% wagtailuserbar %}
+
+    {% block header %}
+    <div class="header">
+        <nav class="navbar navbar-default navbar-fixed-top container {{ css_class }}" data-spy="affix" data-offset-top="0">
+            <div class="fill">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/"><img src="{% static 'img/savoia-castle-round.png' %}" alt="Savoia Castle"></a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse container">
+                    <ul class="nav navbar-nav">
+                        <li class="{% if calling_page.get_depth == 2 %} active{% endif %}"><a href="{% pageurl site_root.specific %}">{% trans "Home" %}</a></li>
+                        {% top_menu parent=site_root calling_page=self %}
+                    </ul>
+                    {% include 'basic/elements/language_selector.html' %}
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    {% endblock %}
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    {% block after_content %}{% endblock %}
+
+    {% block footer %}
+    <div class="footer container white inner">
+    </div>
+    {% endblock %}
+
+    {# Global javascript #}
+    <script src="{% static 'dist/js/components.js' %}"></script>
+    {% comment %}
+    <!-- uncomment if there is a custom JS code in the /static/js/project.js file
+    <script src="{% static 'dist/js/project.js' %}" type="text/javascript"></script>
+    -->
+    {% endcomment %}
+    {% block extra_js %}
+{% endblock %}
+</body>
 </html>{% endraw %}
