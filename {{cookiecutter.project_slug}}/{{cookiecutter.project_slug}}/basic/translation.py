@@ -6,6 +6,6 @@ from wagtail_modeltranslation.decorators import register
 @register(BasicPage)
 class BasicPageTranslation(TranslationOptions):
     fields = (
-        'title',
+        'intro',
         'body',
     )

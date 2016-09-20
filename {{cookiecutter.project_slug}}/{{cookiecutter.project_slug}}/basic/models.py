@@ -7,7 +7,9 @@ from wagtail.wagtailcore import fields
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailadmin.edit_handlers import StreamFieldPanel, FieldPanel, \
     InlinePanel
+from wagtail.wagtailcore.fields import RichTextField
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
+from wagtail.wagtailforms.models import AbstractForm
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail_modeltranslation.models import TranslationMixin
@@ -93,10 +95,54 @@ class ImageGalleryItem(Orderable, Image):
     page = ParentalKey('basic.BasicPage', related_name='gallery')
 
 
-class BasicPage(TranslationMixin, Page):
+class AbstractBasicPage(TranslationMixin, Page):
+
+    cover_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    intro = fields.RichTextField(blank=True)
     body = fields.StreamField(BasicStreamBlock())
 
-BasicPage.content_panels = Page.content_panels + [
-    StreamFieldPanel('body'),
-    InlinePanel('gallery', label="Images"),
-]
+    class Meta:
+        abstract = True
+
+    content_panels = Page.content_panels + [
+        FieldPanel('intro', classname="full"),
+        ImageChooserPanel('cover_image'),
+        StreamFieldPanel('body'),
+        InlinePanel('gallery', label="Images"),
+    ]
+
+
+class AbstractBasicFormPage(TranslationMixin, AbstractForm):
+
+    cover_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    intro = fields.RichTextField(blank=True)
+    body = fields.StreamField(BasicStreamBlock())
+    submit_text = RichTextField(blank=True)
+
+    class Meta:
+        abstract = True
+
+    content_panels = Page.content_panels + [
+        FieldPanel('intro', classname="full"),
+        ImageChooserPanel('cover_image'),
+        StreamFieldPanel('body'),
+        InlinePanel('gallery', label="Images"),
+        InlinePanel('form_fields', label="Form fields"),
+        FieldPanel('submit_text', classname="full"),
+    ]
+
+
+class BasicPage(AbstractBasicPage):
+    pass
