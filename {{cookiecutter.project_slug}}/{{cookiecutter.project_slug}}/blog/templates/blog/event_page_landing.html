@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% raw %}{% extends "base.html" %}
 {% load wagtailcore_tags wagtailimages_tags i18n static %}
 
 {% block content %}
@@ -27,4 +27,4 @@
 
         {% include "basic/elements/carousel.html" with carousel_items=self.carousel_items.all only %}
     </div>
-{% endblock %}
+{% endblock %}{% endraw %}
