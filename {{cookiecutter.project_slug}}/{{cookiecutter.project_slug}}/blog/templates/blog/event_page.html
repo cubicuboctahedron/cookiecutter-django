@@ -23,8 +23,6 @@
     <div class="container white inner">
         {% include "basic/includes/streamfield.html" with content=self.body %}
 
-        {% include "blog/elements/carousel.html" with carousel_items=self.carousel_items.all only %}
-
         {% include "basic/elements/carousel.html" with carousel_items=self.carousel_items.all only %}
 
         {% if form.as_p %}
