@@ -1,0 +1,12 @@
+{% raw %}{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+    {% for about in abouts %}
+        <li class="{% if forloop.first %} first-reset{% endif %}">
+            <h2><a href="{% pageurl about %}">{{ about.title }}</a></h2>
+            {% image about.cover_image width-1180 as cover %}
+            <img src="{{ cover.url }}" title="{{ cover.alt }}" alt="{{ cover.alt }}" class="img-responsive"/>
+        </li>
+    {% endfor %}
+{% endblock %}{% endraw %}
