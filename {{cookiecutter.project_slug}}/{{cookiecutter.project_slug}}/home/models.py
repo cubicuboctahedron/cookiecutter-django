@@ -1,6 +1,4 @@
 from wagtail.wagtailcore.models import Orderable
-
-from wagtail_modeltranslation.models import TranslationMixin
 from modelcluster.fields import ParentalKey
 
 from ..basic.models import AbstractBasicPage, Image

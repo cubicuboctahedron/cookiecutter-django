@@ -1,3 +1,4 @@
+{%- if cookiecutter.use_translations == 'y' -%}
 from .models import AboutPage, AboutIndexPage
 from wagtail_modeltranslation.translator import TranslationOptions
 from wagtail_modeltranslation.decorators import register
@@ -15,3 +16,4 @@ class AboutIndexPageTranslation(TranslationOptions):
     fields = (
         'intro',
     )
+{%- endif -%}

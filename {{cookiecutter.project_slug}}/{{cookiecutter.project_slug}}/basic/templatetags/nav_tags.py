@@ -1,4 +1,4 @@
-from itertools import chain
+{% raw %}from itertools import chain
 
 from django import template
 from django.utils import translation
@@ -78,4 +78,4 @@ def switch_language(context, requested_language=None, *args, **kwargs):
                 url = reverse(url_parts.view_name, kwargs=url_parts.kwargs)
 
         return force_text(url)
-    return ''
+    return ''{% endraw %}

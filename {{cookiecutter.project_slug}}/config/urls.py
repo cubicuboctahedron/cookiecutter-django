@@ -20,11 +20,14 @@ urlpatterns = [
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
     url(r'^sitemap\.xml$', sitemap),
+    {% if cookiecutter.use_translations == 'n' %}url(r'', include(wagtail_urls)){% endif %}
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+{% if cookiecutter.use_translations == 'y' %}
 urlpatterns += i18n_patterns(
     url(r'', include(wagtail_urls))
 )
+{% endif %}
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit

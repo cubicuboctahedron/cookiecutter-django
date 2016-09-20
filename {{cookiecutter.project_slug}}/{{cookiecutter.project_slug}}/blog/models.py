@@ -9,7 +9,7 @@ from wagtail.wagtailforms.models import AbstractFormField
 from wagtail.wagtailadmin.edit_handlers import StreamFieldPanel, FieldPanel, \
     InlinePanel, PageChooserPanel
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
-from wagtail_modeltranslation.models import TranslationMixin
+{% if cookiecutter.use_translations == 'y' %}from wagtail_modeltranslation.models import TranslationMixin{% endif %}
 from wagtail.wagtailsearch import index
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -94,7 +94,7 @@ class EventPage(AbstractBasicFormPage):
     ]
 
 
-class BlogIndexPage(TranslationMixin, Page):
+class BlogIndexPage({%- if cookiecutter.use_translations == 'y' -%}TranslationMixin, {%- endif -%}Page):
 
     class Meta:
         verbose_name = 'Blog Post List'
@@ -124,7 +124,7 @@ class BlogIndexPage(TranslationMixin, Page):
     ]
 
 
-class EventIndexPage(TranslationMixin, Page):
+class EventIndexPage({%- if cookiecutter.use_translations == 'y' -%}TranslationMixin, {%- endif -%}Page):
 
     class Meta:
         verbose_name = 'Event List'

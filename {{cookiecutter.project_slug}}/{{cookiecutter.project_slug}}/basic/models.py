@@ -12,7 +12,7 @@ from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailforms.models import AbstractForm
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
-from wagtail_modeltranslation.models import TranslationMixin
+{% if cookiecutter.use_translations == 'y' %}from wagtail_modeltranslation.models import TranslationMixin{% endif %}
 from wagtail.wagtailcore.blocks import TextBlock, StructBlock, StreamBlock, \
     FieldBlock, CharBlock, RichTextBlock, RawHTMLBlock
 from modelcluster.fields import ParentalKey
@@ -95,7 +95,7 @@ class ImageGalleryItem(Orderable, Image):
     page = ParentalKey('basic.BasicPage', related_name='gallery')
 
 
-class AbstractBasicPage(TranslationMixin, Page):
+class AbstractBasicPage({%- if cookiecutter.use_translations == 'y' -%}TranslationMixin, {%- endif -%}Page):
 
     cover_image = models.ForeignKey(
         'wagtailimages.Image',
@@ -118,7 +118,7 @@ class AbstractBasicPage(TranslationMixin, Page):
     ]
 
 
-class AbstractBasicFormPage(TranslationMixin, AbstractForm):
+class AbstractBasicFormPage({%- if cookiecutter.use_translations == 'y' -%}TranslationMixin, {%- endif -%}AbstractForm):
 
     cover_image = models.ForeignKey(
         'wagtailimages.Image',

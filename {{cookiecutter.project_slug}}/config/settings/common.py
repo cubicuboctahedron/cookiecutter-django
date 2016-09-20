@@ -36,7 +36,7 @@ DJANGO_APPS = (
     'django.contrib.admin',
 )
 WAGTAIL_APPS = (
-    'wagtail_modeltranslation',
+    {% if cookiecutter.use_translations == 'y' %}'wagtail_modeltranslation',{% endif %}
     'wagtail.wagtailforms',
     'wagtail.wagtailredirects',
     'wagtail.wagtailembeds',
@@ -70,7 +70,7 @@ INSTALLED_APPS = DJANGO_APPS + WAGTAIL_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
+    {% if cookiecutter.use_translations == 'y' %}'django.middleware.locale.LocaleMiddleware',{% endif %}
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -267,14 +267,16 @@ WEBPACK_LOADER = {
 
 # Your common stuff: Below this line define 3rd party library settings
 WAGTAIL_SITE_NAME = '{{ cookiecutter.project_name }}'
+{% if cookiecutter.use_translations == 'y' %}
 LANGUAGES = [
     ('en', 'English'),
 ]
-DATE_FORMAT = 'j N Y'
-TIME_FORMAT = 'H:i'
 LOCALE_PATHS = (
     str(APPS_DIR('locale')),
 )
+{% endif %}
+DATE_FORMAT = 'j N Y'
+TIME_FORMAT = 'H:i'
 
 # STORAGE CONFIGURATION
 # ------------------------------------------------------------------------------
