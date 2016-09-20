@@ -6,7 +6,7 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.views import defaults as default_views
-
+from django.conf.urls.i18n import i18n_patterns
 from wagtail.wagtailadmin import urls as wagtailadmin_urls
 from wagtail.wagtaildocs import urls as wagtaildocs_urls
 from wagtail.wagtailcore import urls as wagtail_urls
@@ -20,10 +20,11 @@ urlpatterns = [
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
     url(r'^sitemap\.xml$', sitemap),
-    url(r'', include(wagtail_urls)),
-
-
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += i18n_patterns(
+    url(r'', include(wagtail_urls))
+)
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit

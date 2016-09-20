@@ -9,6 +9,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/dev/ref/settings/
 """
 from __future__ import absolute_import, unicode_literals
+from django.utils import six
 
 import environ
 
@@ -56,7 +57,9 @@ THIRD_PARTY_APPS = (
 # Apps specific for this project go here.
 LOCAL_APPS = (
     '{{ cookiecutter.project_slug }}.basic',
+    '{{ cookiecutter.project_slug }}.home',
     '{{ cookiecutter.project_slug }}.blog',
+    '{{ cookiecutter.project_slug }}.pages',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -67,6 +70,7 @@ INSTALLED_APPS = DJANGO_APPS + WAGTAIL_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -127,7 +131,7 @@ DATABASES['default']['ATOMIC_REQUESTS'] = True
 TIME_ZONE = '{{ cookiecutter.timezone }}'
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#language-code
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#site-id
 SITE_ID = 1
@@ -263,3 +267,32 @@ WEBPACK_LOADER = {
 
 # Your common stuff: Below this line define 3rd party library settings
 WAGTAIL_SITE_NAME = '{{ cookiecutter.project_name }}'
+LANGUAGES = [
+    ('en', 'English'),
+]
+DATE_FORMAT = 'j N Y'
+TIME_FORMAT = 'H:i'
+LOCALE_PATHS = (
+    str(APPS_DIR('locale')),
+)
+
+# STORAGE CONFIGURATION
+# ------------------------------------------------------------------------------
+# Uploaded Media Files
+# ------------------------
+# See: http://django-storages.readthedocs.io/en/latest/index.html
+AWS_ACCESS_KEY_ID = env('DJANGO_AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('DJANGO_AWS_SECRET_ACCESS_KEY')
+AWS_BUCKET_NAME = AWS_STORAGE_BUCKET_NAME = env('DJANGO_AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = env('DJANGO_AWS_STORAGE_REGION')
+
+# AWS cache settings, don't change unless you know what you're doing:
+AWS_EXPIRY = 60 * 60 * 24 * 7
+
+# TODO See: https://github.com/jschneier/django-storages/issues/47
+# Revert the following and use str after the above-mentioned bug is fixed in
+# either django-storage-redux or boto
+AWS_HEADERS = {
+    'Cache-Control': six.b('max-age=%d, s-maxage=%d, must-revalidate' % (
+        AWS_EXPIRY, AWS_EXPIRY))
+}
