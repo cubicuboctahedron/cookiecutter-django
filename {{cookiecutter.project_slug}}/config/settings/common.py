@@ -298,3 +298,4 @@ AWS_HEADERS = {
     'Cache-Control': six.b('max-age=%d, s-maxage=%d, must-revalidate' % (
         AWS_EXPIRY, AWS_EXPIRY))
 }
+WAGTAIL_ALLOW_UNICODE_SLUGS = False

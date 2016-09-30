@@ -66,7 +66,7 @@ django-webpack-loader==0.3.3
 
 # Your custom requirements go here
 wagtail==1.6.2
--e git+https://github.com/cubicuboctahedron/wagtail-modeltranslation.git@bdacd60188a49ae54b9021c178de8aa9f858307a#egg=wagtail-modeltranslation
+-e git+https://github.com/cubicuboctahedron/wagtail-modeltranslation.git@5a17e957c2441ca60a8fe6d8138b9e1dfe3b88cb#egg=wagtail-modeltranslation
 
 # Static and Media Storage
 # ------------------------------------------------
