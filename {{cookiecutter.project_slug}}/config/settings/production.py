@@ -103,6 +103,7 @@ INSTALLED_APPS += ('gunicorn', )
 INSTALLED_APPS += (
     'storages',
 )
+DEFAULT_FILE_STORAGE = 'config.settings.production.MediaRootS3BotoStorage'
 
 # URL that handles the media served from MEDIA_ROOT, used for managing
 # stored files.
@@ -113,7 +114,6 @@ MEDIA_URL = 'https://s3.amazonaws.com/%s/' % AWS_STORAGE_BUCKET_NAME
 from storages.backends.s3boto import S3BotoStorage
 StaticRootS3BotoStorage = lambda: S3BotoStorage(location='static')
 MediaRootS3BotoStorage = lambda: S3BotoStorage(location='media')
-DEFAULT_FILE_STORAGE = 'config.settings.production.MediaRootS3BotoStorage'
 
 MEDIA_URL = 'https://s3.amazonaws.com/%s/media/' % AWS_STORAGE_BUCKET_NAME
 {%- endif %}
