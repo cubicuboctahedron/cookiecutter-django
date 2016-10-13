@@ -6,8 +6,21 @@ eval $(docker-machine env default) && \
         echo "Done" && \
 
 echo "Commit" && \
+    git add {{ cookiecutter.project_slug }}/dumps/data.json && \
     git commit {{ cookiecutter.project_slug }}/dumps/data.json -m "Update fixtures" && \
+        echo "Done"
+
+{% if use_translations %}
+echo "Compile translations" && \
+eval $(docker-machine env default) && \
+    docker-compose -f dev.yml run --rm django python -Wi manage.py compilemessages && \
         echo "Done" && \
+
+echo "Commit" && \
+    git add {{ cookiecutter.project_slug }}/locale && \
+    git commit {{ cookiecutter.project_slug }}/locale -m "Update translations" && \
+        echo "Done"
+{% endif %}
 
 echo "Push" && \
     git push && \
