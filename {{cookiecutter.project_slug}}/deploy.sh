@@ -10,7 +10,7 @@ echo "Commit" && \
     git commit {{ cookiecutter.project_slug }}/dumps/data.json -m "Update fixtures" && \
         echo "Done"
 
-{% if use_translations %}
+{% if cookiecutter.use_translations %}
 echo "Compile translations" && \
 eval $(docker-machine env default) && \
     docker-compose -f dev.yml run --rm django python -Wi manage.py compilemessages && \
