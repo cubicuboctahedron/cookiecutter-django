@@ -3,6 +3,7 @@ node_modules
 {{cookiecutter.project_slug}}/static/components
 {{cookiecutter.project_slug}}/static/dist
 {{cookiecutter.project_slug}}/media
+{{cookiecutter.project_slug}}/dumps
 !.coveragerc
 !.env
 !.pylintrc
