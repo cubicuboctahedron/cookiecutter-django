@@ -2,12 +2,12 @@
 set -e
 echo "Dump data" && \
 eval $(docker-machine env default) && \
-    docker-compose -f dev.yml run --rm django python -Wi manage.py dumpdata --natural-foreign --indent=4 -e contenttypes -e auth.Permission -e sessions -o {{ cookiecutter.project_slug }}/dumps/data.json && \
+    docker-compose -f dev.yml run --rm django python -Wi manage.py dumpdata --natural-foreign --indent=4 -e wagtailcore.site -e contenttypes -e auth.Permission -e sessions -o {{ cookiecutter.project_slug }}/fixtures/data.json && \
         echo "Done" && \
 
 echo "Commit" && \
-    git add {{ cookiecutter.project_slug }}/dumps/data.json && \
-    git commit {{ cookiecutter.project_slug }}/dumps/data.json -m "Update fixtures" && \
+    git add {{ cookiecutter.project_slug }}/fixtures/data.json && \
+    git commit {{ cookiecutter.project_slug }}/fixtures/data.json -m "Update fixtures" && \
         echo "Done"
 
 {% if cookiecutter.use_translations %}
@@ -45,5 +45,5 @@ eval $(docker-machine env node1) && \
         echo "Done" && \
 echo "Load DB data" && \
 eval $(docker-machine env node1) && \
-    docker-compose run --rm django ./manage.py loaddata {{ cookiecutter.project_slug }}/dumps/data.json && \
+    docker-compose run --rm django ./manage.py loaddata {{ cookiecutter.project_slug }}/fixtures/data.json && \
         echo "Done"
