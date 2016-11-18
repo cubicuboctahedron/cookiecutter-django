@@ -193,7 +193,8 @@ module.exports = function (grunt) {
                 sourceMap: true,
             },
             files: {
-                '<%= paths.dist %>/js/components.min.js': ['<%= paths.dist %>/js/components.js'],
+                '<%= paths.dist %>/js/components.js': ['<%= paths.dist %>/js/components.js'],
+                '<%= paths.dist %>/js/project.js': ['<%= paths.dist %>/js/components.js'],
             }
         }
     }
