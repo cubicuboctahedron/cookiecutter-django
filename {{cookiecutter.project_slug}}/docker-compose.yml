@@ -2,10 +2,9 @@ version: '2'
 
 services:
   postgres:
-    build: ./compose/postgres
+    image: postgres:9.5
     volumes:
       - /projects/{{cookiecutter.project_slug}}/postgres:/var/lib/postgresql/data
-      - /backups/{{cookiecutter.project_slug}}/postgres:/backups
     env_file: ./compose/postgres/.env.postgres
     restart: always
     network_mode: "bridge"
