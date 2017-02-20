@@ -105,7 +105,7 @@ class AbstractBasicPage({%- if cookiecutter.use_translations == 'y' -%}Translati
         related_name='+'
     )
     intro = fields.RichTextField(blank=True)
-    body = fields.StreamField(BasicStreamBlock())
+    body = fields.StreamField(BasicStreamBlock(), null=True)
 
     class Meta:
         abstract = True
@@ -128,7 +128,7 @@ class AbstractBasicFormPage({%- if cookiecutter.use_translations == 'y' -%}Trans
         related_name='+'
     )
     intro = fields.RichTextField(blank=True)
-    body = fields.StreamField(BasicStreamBlock())
+    body = fields.StreamField(BasicStreamBlock(), null=True)
     submit_text = RichTextField(blank=True)
 
     class Meta:
