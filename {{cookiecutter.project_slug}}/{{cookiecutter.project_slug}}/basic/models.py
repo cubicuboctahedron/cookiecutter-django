@@ -97,22 +97,19 @@ class ImageGalleryItem(Orderable, Image):
 
 class AbstractBasicPage({%- if cookiecutter.use_translations == 'y' -%}TranslationMixin, {%- endif -%}Page):
 
-    cover_image = models.ForeignKey(
-        'wagtailimages.Image',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
-    )
     intro = fields.RichTextField(blank=True)
     body = fields.StreamField(BasicStreamBlock(), null=True)
+
+    @property
+    def cover_image(self):
+        if self.gallery_images.exists():
+            return self.gallery_images.first().image
 
     class Meta:
         abstract = True
 
     content_panels = Page.content_panels + [
         FieldPanel('intro', classname="full"),
-        ImageChooserPanel('cover_image'),
         StreamFieldPanel('body'),
         InlinePanel('gallery', label="Images"),
     ]
@@ -120,23 +117,20 @@ class AbstractBasicPage({%- if cookiecutter.use_translations == 'y' -%}Translati
 
 class AbstractBasicFormPage({%- if cookiecutter.use_translations == 'y' -%}TranslationMixin, {%- endif -%}AbstractForm):
 
-    cover_image = models.ForeignKey(
-        'wagtailimages.Image',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
-    )
     intro = fields.RichTextField(blank=True)
     body = fields.StreamField(BasicStreamBlock(), null=True)
     submit_text = RichTextField(blank=True)
+
+    @property
+    def cover_image(self):
+        if self.gallery_images.exists():
+            return self.gallery_images.first().image
 
     class Meta:
         abstract = True
 
     content_panels = Page.content_panels + [
         FieldPanel('intro', classname="full"),
-        ImageChooserPanel('cover_image'),
         StreamFieldPanel('body'),
         InlinePanel('gallery', label="Images"),
         InlinePanel('form_fields', label="Form fields"),
