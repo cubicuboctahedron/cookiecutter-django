@@ -194,7 +194,7 @@ module.exports = function (grunt) {
             },
             files: {
                 '<%= paths.dist %>/js/components.js': ['<%= paths.dist %>/js/components.js'],
-                '<%= paths.dist %>/js/project.js': ['<%= paths.dist %>/js/components.js'],
+                '<%= paths.dist %>/js/project.js': ['<%= paths.dist %>/js/project.js'],
             }
         }
     }
