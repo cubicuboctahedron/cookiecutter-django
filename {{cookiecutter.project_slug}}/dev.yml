@@ -3,6 +3,11 @@ version: '2'
 volumes:
   postgres_data_dev: {}
 
+networks:
+  default:
+    external:
+      name: dev
+
 services:
   postgres:
     image: postgres:9.5
@@ -10,7 +15,6 @@ services:
       - postgres_data_dev:/var/lib/postgresql/data
     env_file: ./compose/postgres/.env.postgres
     restart: always
-    network_mode: "bridge"
 
   django:
     build:
@@ -29,5 +33,6 @@ services:
       - "8000"
     links:
       - postgres
+    depends_on:
+      - postgres
     restart: always
-    network_mode: "bridge"
