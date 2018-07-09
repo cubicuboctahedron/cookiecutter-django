@@ -69,6 +69,7 @@ wagtail==1.6.2
 {% if cookiecutter.use_translations == "y" %}
 -e git+https://github.com/cubicuboctahedron/wagtail-modeltranslation.git@5a17e957c2441ca60a8fe6d8138b9e1dfe3b88cb#egg=wagtail-modeltranslation
 {% endif %}
+djangorestframework==3.6
 
 # Static and Media Storage
 # ------------------------------------------------
